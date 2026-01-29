@@ -34,10 +34,11 @@ time = now.strftime("%I:%M %p")
 # --- GOOGLE SHEETS ---
 creds_json = os.environ["GOOGLE_CREDS"]
 scopes = ["https://www.googleapis.com/auth/spreadsheets"]
+creds_dict = json.loads(creds_json)
 creds = Credentials.from_service_account_info(
-    eval(creds_json), scopes=scopes
+    creds_dict,
+    scopes=scopes
 )
-
 client = gspread.authorize(creds)
 sheet = client.open(SHEET_NAME).sheet1
 
