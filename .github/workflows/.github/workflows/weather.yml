@@ -1,0 +1,31 @@
+name: Weather Logger
+
+on:
+  schedule:
+    - cron: '0 15 * * *'  # 8am MST
+    - cron: '0 2 * * *'   # 7pm MST
+  workflow_dispatch:
+
+jobs:
+  run-weather:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install requests gspread google-auth
+
+      - name: Run weather logger
+        env:
+          OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+          GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDS }}
+        run: |
+          python weather_logger.py
